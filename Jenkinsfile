@@ -1,5 +1,10 @@
 pipeline {
     agent { label 'first_agent' }  // Set the default agent for the entire pipeline
+    environment {
+    imagename = "riyas/todoapp"
+    registryCredential = 'dockerhub'
+    dockerImage = ''
+   }    
     
     stages {
         stage('Clone repository') {
@@ -8,38 +13,30 @@ pipeline {
                 checkout scm
             }
         }
-        
-        stage('Build image') {
-            steps {
-                script {
-                    sh "docker build ${env.WORKSPACE} -t todoapp:jenkins"
-                }
-            }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
         }
-        
-        stage('Test image') {
-            steps {
-                script {
-                    // Run tests inside the Docker container.
-                    // The app.inside block runs commands inside a container based on the built image.
-                    inside {
-                        sh 'echo "Tests passed"'  // Placeholder for actual tests; replace with real test commands
-                    }
-                }
-            }
-        }
-        
-        stage('Push image') {
-            steps {
-                script {
-                    // Authenticate with Docker Hub and push the built image, tagging it with the current build number.
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        push("${env.BUILD_NUMBER}")  // Push the image with a tag matching the build number
-                    }
-                }
-            }
-        }
-        
-
+      }
     }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $imagename:$BUILD_NUMBER"
+         sh "docker rmi $imagename:latest"
+
+      }
+    }
+  }
 }
