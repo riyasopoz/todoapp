@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Build a Docker image named "todo/test" from the Dockerfile in the checked-out repository.
-                    app = docker.build("todo/test")
+                    docker.build("todo/test")
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
                 script {
                     // Run tests inside the Docker container.
                     // The app.inside block runs commands inside a container based on the built image.
-                    app.inside {
+                    inside {
                         sh 'echo "Tests passed"'  // Placeholder for actual tests; replace with real test commands
                     }
                 }
@@ -35,7 +35,7 @@ pipeline {
                 script {
                     // Authenticate with Docker Hub and push the built image, tagging it with the current build number.
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        app.push("${env.BUILD_NUMBER}")  // Push the image with a tag matching the build number
+                        push("${env.BUILD_NUMBER}")  // Push the image with a tag matching the build number
                     }
                 }
             }
