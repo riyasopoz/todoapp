@@ -12,8 +12,7 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    // Build a Docker image named "todo/test" from the Dockerfile in the checked-out repository.
-                    docker.build("todo/test")
+                    sh "docker build ${env.WORKSPACE} -t todoapp:jenkins"
                 }
             }
         }
