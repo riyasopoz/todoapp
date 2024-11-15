@@ -1,8 +1,8 @@
 pipeline {
     agent { label 'first_agent' }  // Set the default agent for the entire pipeline
     environment {
-    imagename = "riyas/todoapp"
-    registryCredential = 'dockerhub'
+    imagename = "mothomas/todoapp"
+    registryCredential = 'docker'
     dockerImage = ''
    }    
     
