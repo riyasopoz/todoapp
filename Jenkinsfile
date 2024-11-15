@@ -10,7 +10,6 @@ pipeline {
         }
         
         stage('Build image') {
-            agent { label 'agent-label-for-build' }  // Override agent only for this stage
             steps {
                 script {
                     // Build a Docker image named "todo/test" from the Dockerfile in the checked-out repository.
