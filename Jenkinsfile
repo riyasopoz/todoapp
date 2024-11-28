@@ -2,7 +2,7 @@ pipeline {
     agent { label 'first_agent' }  // Set the default agent for the entire pipeline
     environment {
     imagename = "rputhenp/todoapp"
-    registryCredential = 'dockercred'
+    registryCredential = 'e74efcea-4e27-439c-b556-4a6bc0201554'
     dockerImage = ''
    }    
     
