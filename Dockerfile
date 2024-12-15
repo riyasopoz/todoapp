@@ -18,6 +18,5 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Set the port the container will expose
-EXPOSE 80
 
 CMD ["python3", "app.py"]
